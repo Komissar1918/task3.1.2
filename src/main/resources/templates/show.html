@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+Id: <p th:text="${user.getId()}">Value</p>
+Name: <p th:text="${user.getName()}">Value</p>
+Surname: <p th:text="${user.getSurname()}">Value</p>
+
+<a href="http://localhost:8080/users">Users</a>
+
+</body>
+</html>

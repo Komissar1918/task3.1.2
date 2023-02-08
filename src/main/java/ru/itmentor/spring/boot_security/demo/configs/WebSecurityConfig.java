@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().hasAnyRole("ADMIN", "USER")
                 .and()
                 .formLogin()
-                .defaultSuccessUrl("/", true)
+                .successHandler(successUserHandler)
                 .and()
                 .logout()
                 .logoutUrl("/logout")

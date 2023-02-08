@@ -27,16 +27,11 @@ public class User{
 
     @Column(name = "password")
     private String password;
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    private Set<Role_User> roles;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "role")
+    private String role;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+
 
     public User() {
     }
@@ -46,16 +41,13 @@ public class User{
         this.surname = surname;
         this.password = password;
     }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
+    public Integer getId() {
+        return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -81,11 +73,20 @@ public class User{
         this.password = password;
     }
 
-//    public Set<Role_User> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(Set<Role_User> roles) {
-//        this.roles = roles;
-//    }
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                '}';
+    }
 }

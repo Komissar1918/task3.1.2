@@ -17,7 +17,6 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/users")
 public class UsersController {
 
     private final UserDetailsServiceImpl userService;
@@ -27,7 +26,7 @@ public class UsersController {
         this.userService = userService;
     }
 
-    @GetMapping()
+    @GetMapping("/admin")
     public String getUsers(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);

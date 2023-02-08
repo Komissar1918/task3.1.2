@@ -1,9 +1,11 @@
 package ru.itmentor.spring.boot_security.demo.services;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.itmentor.spring.boot_security.demo.models.User;
@@ -19,10 +21,12 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
+    //private final PasswordEncoder passwordEncoder;
 
-
+    @Autowired
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
+       // this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -40,6 +44,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Transactional
     public void save(User user) {
+//        String encodePass = passwordEncoder.encode(user.getPassword());
+//        user.setPassword(encodePass);
+        user.setRole("ROLE_USER");
         userRepository.save(user);
     }
 

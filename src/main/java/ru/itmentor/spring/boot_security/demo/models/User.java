@@ -3,15 +3,21 @@ package ru.itmentor.spring.boot_security.demo.models;
 
 
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+
 
     @Column(name = "name")
     private String name;
@@ -19,7 +25,10 @@ public class User {
     @Column(name = "surname")
     private String surname;
 
-
+    @Column(name = "password")
+    private String password;
+//    @ManyToMany(fetch = FetchType.EAGER)
+//    private Set<Role_User> roles;
 
     public Integer getId() {
         return id;
@@ -32,10 +41,10 @@ public class User {
     public User() {
     }
 
-    public User(Integer id, String name, String surname) {
-        this.id = id;
+    public User(String name, String surname, String password) {
         this.name = name;
         this.surname = surname;
+        this.password = password;
     }
 
     @Override
@@ -46,7 +55,6 @@ public class User {
                 ", surname='" + surname + '\'' +
                 '}';
     }
-
 
 
     public String getName() {
@@ -65,4 +73,19 @@ public class User {
         this.surname = surname;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+//    public Set<Role_User> getRoles() {
+//        return roles;
+//    }
+//
+//    public void setRoles(Set<Role_User> roles) {
+//        this.roles = roles;
+//    }
 }

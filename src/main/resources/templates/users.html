@@ -12,13 +12,15 @@
 <table border="1" cellpadding="5">
 <tr>
     <th>Name</th>
-    <th>Surname</th></th>
+    <th>Surname</th>
+    <th>Password</th>
     <th>Action</th>
 </tr>
   <div th:each="user : ${users}">
    <tr>
          <td> <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getName()}"></a></td>
          <td> <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getSurname()}"></a></td>
+         <td> <a th:href="@{/users/{id}(id=${user.getPassword()})}" th:text="${user.getPassword()}"></a></td>
          <td>
              <form th:method="GET" th:action="@{/users/{id}/edit(id=${user.getId()})}">
                  <input type="submit" value="Edit">

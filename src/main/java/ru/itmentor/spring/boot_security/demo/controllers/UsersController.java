@@ -1,11 +1,16 @@
 package ru.itmentor.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.models.User;
-import ru.itmentor.spring.boot_security.demo.services.UserService;
+import ru.itmentor.spring.boot_security.demo.security.UserDetailsImpl;
+import ru.itmentor.spring.boot_security.demo.services.UserDetailsServiceImpl;
 
 
 import java.util.List;
@@ -15,10 +20,10 @@ import java.util.List;
 @RequestMapping("/users")
 public class UsersController {
 
-    private final UserService userService;
+    private final UserDetailsServiceImpl userService;
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserDetailsServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -32,8 +37,12 @@ public class UsersController {
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model){
         model.addAttribute("user", userService.findOne(id));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        System.out.println(userDetails.getUser());
         return "show";
     }
+
 
     @GetMapping("/addNewUser")
     public String addNewUser(Model model) {

@@ -14,18 +14,20 @@
     <th>Name</th>
     <th>Surname</th>
     <th>Password</th>
+    <th>Role</th>
     <th>Action</th>
 </tr>
   <div th:each="user : ${users}">
    <tr>
-         <td> <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getName()}"></a></td>
-         <td> <a th:href="@{/users/{id}(id=${user.getId()})}" th:text="${user.getSurname()}"></a></td>
-         <td> <a th:href="@{/users/{id}(id=${user.getPassword()})}" th:text="${user.getPassword()}"></a></td>
+         <td th:text="${user.getName()}"></td>
+         <td th:text="${user.getSurname()}"></td>
+         <td th:text="${user.getPassword()}"></td>
+         <td th:text="${user.getRole()}"></td>
          <td>
-             <form th:method="GET" th:action="@{/users/{id}/edit(id=${user.getId()})}">
+             <form th:method="GET" th:action="@{/{id}/edit(id=${user.getId()})}">
                  <input type="submit" value="Edit">
              </form>
-             <form th:method="DELETE" th:action="@{/users/{id}(id=${user.getId()})}">
+             <form th:method="DELETE" th:action="@{/admin/{id}(id=${user.getId()})}">
                  <input type="submit" value="Delete"/>
              </form>
         </td>
@@ -35,7 +37,9 @@
 </table>
 
 <br>
-<input type="button" value="Add" onclick="window.location.href='/users/addNewUser'">
+<input type="button" value="Add" onclick="window.location.href='/addNewUser'">
+<br>
+<a href="/logout">Logout</a>
 
 </body>
 </html>

@@ -33,12 +33,17 @@ public class UsersController {
         return "users";
     }
 
+    @GetMapping("/user")
+    public String userPageShow(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        return show(userDetails.getUser().getId(), model);
+    }
+
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model){
         model.addAttribute("user", userService.findOne(id));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        System.out.println(userDetails.getUser());
+
         return "show";
     }
 
@@ -53,7 +58,7 @@ public class UsersController {
     public String saveUser(@ModelAttribute("user") User user) {
         System.out.println("Новый user");
         userService.save(user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
     @GetMapping("/{id}/edit")
@@ -62,16 +67,16 @@ public class UsersController {
         return "edit";
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("admin/edit/{id}")
     public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
         userService.update(id, user);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("admin/{id}")
     public String deleteUser(@PathVariable("id") int id) {
         userService.delete(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 
 

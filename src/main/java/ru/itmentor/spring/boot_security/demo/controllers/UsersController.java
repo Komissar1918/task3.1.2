@@ -3,7 +3,6 @@ package ru.itmentor.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +29,11 @@ public class UsersController {
     public String getUsers(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        model.addAttribute("userPrincipal", userDetails.getUser());
+        model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
+                " with roles " + userDetails.getUser().getRole());
         return "users";
     }
 
@@ -37,15 +41,13 @@ public class UsersController {
     public String userPageShow(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return show(userDetails.getUser().getId(), model);
+        model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
+                " with roles " + userDetails.getUser().getRole());
+        model.addAttribute("userPrincipal", userDetails.getUser());
+        return "user";
     }
 
-    @GetMapping("/{id}")
-    public String show(@PathVariable("id") int id, Model model){
-        model.addAttribute("user", userService.findOne(id));
 
-        return "show";
-    }
 
 
     @GetMapping("/addNewUser")

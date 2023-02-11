@@ -53,6 +53,11 @@ public class UsersController {
     @GetMapping("/addNewUser")
     public String addNewUser(Model model) {
         model.addAttribute("user", new User());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        model.addAttribute("userPrincipal", userDetails.getUser());
+        model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
+                " with roles " + userDetails.getUser().getRole());
         return "userInfo";
     }
 

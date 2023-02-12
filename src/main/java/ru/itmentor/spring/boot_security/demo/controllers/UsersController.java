@@ -51,8 +51,8 @@ public class UsersController {
 
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user) {
-        userService.save(user);
+    public String saveUser(@ModelAttribute("newUser") User newUser) {
+        userService.save(newUser);
         return "redirect:/admin";
     }
 
@@ -64,7 +64,7 @@ public class UsersController {
     }
 
     @PostMapping("admin/delete/{id}")
-    public String deleteUser(@PathVariable("id") int id) {
+    public String deleteUser(@PathVariable("id") int id, @ModelAttribute("user") User user) {
         userService.delete(id);
         return "redirect:/admin";
     }

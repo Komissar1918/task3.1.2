@@ -51,7 +51,8 @@
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="users-table" role="tabpanel" aria-labelledby="users-table-tab">
+                <div class="tab-pane fade show active" id="users-table" role="tabpanel"
+                     aria-labelledby="users-table-tab">
                     <table class="table table-striped">
                         <tr>
                             <th colspan="7">All users</th>
@@ -65,7 +66,7 @@
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
-                        <div th:each=" user : ${users}">
+                        <div th:each="user : ${users}">
                             <tr>
                                 <td th:text="${user.getId()}"></td>
                                 <td th:text="${user.getName()}"></td>
@@ -73,92 +74,91 @@
                                 <td th:text="${user.getPassword()}"></td>
                                 <td th:text="${user.getRole()}"></td>
                                 <td>
-                                <div class="modal fade" th:id="'editModalCenter_' + ${user.getId()}"
-                                     tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="editModalLongTitle">Edit user</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form method="post"
-                                                      th:action="@{'admin/edit/' + ${user.getId()}}" th:object="${newUser}"
-                                                      id="editForm"
-                                                      class="g-3 needs-validation container text-center fw-bold"
-                                                      novalidate>
-                                                    <div class="row justify-content-center">
-                                                        <div class="col-md-8">
-                                                            <label for="editId">ID</label>
-                                                            <input disabled type="text" class="form-control"
-                                                                   th:name="id"
-                                                                   id="editId" th:value="${user.getId()}">
+                                    <div class="modal fade" th:id="'editModalCenter_' + ${user.getId()}"
+                                         tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLongTitle">Edit user</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form method="post"
+                                                          th:action="@{'admin/edit/' + ${user.getId()}}"
+                                                          id="editForm"
+                                                          class="g-3 needs-validation container text-center fw-bold"
+                                                          novalidate>
+                                                            <div class="row justify-content-center">
+                                                            <div class="col-md-8">
+                                                                <label for="editId">ID</label>
+                                                                <input disabled type="text" class="form-control"
+                                                                       th:name="id"
+                                                                       id="editId" th:value="${user.getId()}">
+                                                            </div>
+                                                            </div>
+                                                            <div class="row justify-content-center">
+                                                            <div class="col-md-8 gy-3">
+                                                                <label for="validationEditFirstName">First
+                                                                    name</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="validationEditFirstName"
+                                                                       th:value="${user.getName()}">
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row justify-content-center">
-                                                        <div class="col-md-8 gy-3">
-                                                            <label for="validationEditFirstName">First
-                                                                name</label>
-                                                            <input type="text" class="form-control"
-                                                                   id="validationEditFirstName"
-                                                                   th:value="${user.getName()}"
-                                                            th:field="*{newUser.name}">
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-8 gy-3">
+                                                                <label for="validationEditLastName">Last
+                                                                    name</label>
+                                                                <input type="text" class="form-control"
+                                                                       id="validationEditLastName"
+                                                                       th:name="surname"
+                                                                       th:value="${user.getSurname()}">
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row justify-content-center">
-                                                        <div class="col-md-8 gy-3">
-                                                            <label for="validationEditLastName">Last
-                                                                name</label>
-                                                            <input type="text" class="form-control"
-                                                                   id="validationEditLastName"
-                                                                   th:name="surname"
-                                                                   th:value="${user.getSurname()}"
-                                                                   th:field="*{newUser.surname}">
-                                                        </div>
-                                                    </div>
 
 
-                                                    <div class="row justify-content-center">
-                                                        <div class="col-md-8 gy-3">
-                                                            <label for="validationEditPassword">Password</label>
-                                                            <input th:name="password" type="text" class="form-control"
-                                                                   th:field="*{newUser.password}"
-                                                                   id="validationEditPassword">
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-8 gy-3">
+                                                                <label for="validationEditPassword">Password</label>
+                                                                <input th:name="password" type="text"
+                                                                       class="form-control"
+                                                                       th:value="${user.getPassword()}"
+                                                                       id="validationEditPassword">
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="row justify-content-center">
-                                                        <div class="col-md-8 gy-3">
-                                                            <label for="validationEditRole">Role</label>
-                                                            <select multiple size="2" class="form-select"
-                                                                    id="validationEditRole"
-                                                                    name="form_selected_roles" required>
-                                                                <option th:value="${user.getRole()}"
-                                                                        th:text="${user.getRole().replace('ROLE_', '')} + ' '"
-                                                                        th:field="*{newUser.role}">
-                                                                </option>
-                                                            </select>
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-8 gy-3">
+                                                                <label for="validationEditRole">Role</label>
+                                                                <select multiple size="2" class="form-select"
+                                                                        id="validationEditRole"
+                                                                        name="form_selected_roles" required>
+                                                                    <option th:value="${user.getRole()}"
+                                                                            th:text="${user.getRole()}"
+                                                                    >
+                                                                    </option>
+                                                                </select>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <input type="submit" id="submit-edit-form" class="visually-hidden"/>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                        data-bs-dismiss="modal" aria-label="Close">Close
-                                                </button>
-                                                <label class="btn btn-primary" for="submit-edit-form" tabindex="0">Edit</label>
-                                                <!--                                                        <input type="submit" form="editForm" class="btn btn-primary" value="Edit">-->
+                                                        <input type="submit" id="submit-edit-form"
+                                                               class="visually-hidden"/>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal" aria-label="Close">Close
+                                                    </button>
+                                                    <label class="btn btn-primary" for="submit-edit-form" tabindex="0">Edit</label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                        th:data-bs-target="'#editModalCenter_' + ${user.getId()}">
-                                    Edit
-                                </button>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                            th:data-bs-target="'#editModalCenter_' + ${user.getId()}">
+                                        Edit
+                                    </button>
                                 </td>
                                 <td>
                                     <div class="modal fade" th:id="'deleteModalCenter_' + ${user.getId()}"
@@ -173,10 +173,9 @@
                                                             aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form method="post"
+                                                    <form  method="POST"
                                                           th:action="@{'/admin/delete/' + ${user.getId()}}"
-                                                          id="deleteForm" class="g-3 container text-center fw-bold"
-                                                          novalidate>
+                                                          id="deleteForm" class="g-3 container text-center fw-bold">
                                                         <div class="row justify-content-center">
                                                             <div class="col-md-8">
                                                                 <label for="deleteFormId">ID</label>
@@ -207,10 +206,11 @@
                                                                 <select multiple size="2" class="form-select"
                                                                         id="deleteFormRole" disabled>
                                                                     <option
-                                                                            th:text="${user.getRole()}">
+                                                                            th:value="${user.getRole()}">
                                                                     </option>
                                                                 </select>
-                                                            </div>
+                                                            </div>.
+
                                                         </div>
                                                     </form>
                                                 </div>
@@ -218,7 +218,9 @@
                                                     <button type="button" class="btn btn-secondary"
                                                             data-bs-dismiss="modal">Close
                                                     </button>
-                                                    <button type="submit" form="deleteForm" class="btn btn-danger">Delete</button>
+                                                    <button type="submit" form="deleteForm" class="btn btn-danger">
+                                                        Delete
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -237,28 +239,49 @@
                 <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="new-user-tab">
                     <table class="table table-striped">
                         <tr>
-                            <th colspan="7">Add new user</th>
+                            <th colspan="3">Add new user</th>
                         </tr>
                     </table>
-                        <div class="mb-3">
-                            <form method="POST"  action="/saveUser" th:object="${newUser}">
+                    <div class="mb-3">
+                        <form method="POST" action="/saveUser" th:object="${newUser}">
+                            <div class="row justify-content-center">
+                                <div class="col-md-8 gy-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text"  class="form-control" th:field="*{name}" id="name">
-                            <br><br>
+                            <input type="text" class="form-control" th:field="*{name}" id="name">
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-md-8 gy-3">
                             <label for="surname" class="form-label">Surname</label>
                             <input type="text" class="form-control" th:field="*{surname}" id="surname">
-                            <br><br>
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                        <div class="col-md-8 gy-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="text" class="form-control" th:field="*{password}" id="password">
-                            <br><br>
-                            <select class="form-select" aria-label="Default select example">
-                                <option selected></option>
-                                <option value="ROLE_ADMIN" th:field="*{role}">ADMIN</option>
-                                <option value="ROLE_USER" th:field="*{role}">USER</option>
+                                        </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-md-8 gy-3">
+                                    <label for="validationCreateRole">Role</label>
+                            <select multiple size="2"  class="form-select" id="validationCreateRole" aria-label="Default select example" name="form_selected_roles"
+                                    required>
+                                <option th:value="${newUser}"
+                                        th:selected="*{role}">ADMIN</option>
+                                <option th:value="${newUser}"
+                                        th:selected="*{role}">USER</option>
+
                             </select>
+                                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-auto mt-3">
                             <button type="submit" class="btn btn-success">Add new user</button>
-                            </form>
-                        </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
 
@@ -288,7 +311,6 @@
         </div>
     </div>
 </div>
-
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"

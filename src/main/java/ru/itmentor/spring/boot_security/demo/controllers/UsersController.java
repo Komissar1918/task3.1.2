@@ -33,9 +33,11 @@ public class UsersController {
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         model.addAttribute("userPrincipal", userDetails.getUser());
         model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
-                " with roles " + userDetails.getUser().getRole());
+                " with roles " + userDetails.getUser().getRole().replace("ROLE_", ""));
+        model.addAttribute("newUser", new User());
         return "users";
     }
+
 
     @GetMapping("/user")
     public String userPageShow(Model model) {
@@ -48,39 +50,20 @@ public class UsersController {
     }
 
 
-
-
-    @GetMapping("/addNewUser")
-    public String addNewUser(Model model) {
-        model.addAttribute("user", new User());
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        model.addAttribute("userPrincipal", userDetails.getUser());
-        model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
-                " with roles " + userDetails.getUser().getRole());
-        return "userInfo";
-    }
-
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user) {
-        System.out.println("Новый user");
         userService.save(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/edit")
-    public String editUser(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
-        return "edit";
-    }
 
-    @PatchMapping("admin/edit/{id}")
+    @PostMapping("admin/edit/{id}")
     public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
         userService.update(id, user);
         return "redirect:/admin";
     }
 
-    @DeleteMapping("admin/{id}")
+    @PostMapping("admin/delete/{id}")
     public String deleteUser(@PathVariable("id") int id) {
         userService.delete(id);
         return "redirect:/admin";

@@ -35,6 +35,7 @@ public class UsersController {
         model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
                 " with roles " + userDetails.getUser().getRole().replace("ROLE_", ""));
         model.addAttribute("newUser", new User());
+        model.addAttribute("editUser", new User());
         return "users";
     }
 
@@ -46,6 +47,7 @@ public class UsersController {
         model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
                 " with roles " + userDetails.getUser().getRole());
         model.addAttribute("userPrincipal", userDetails.getUser());
+
         return "user";
     }
 
@@ -58,9 +60,11 @@ public class UsersController {
 
 
     @PostMapping("admin/edit/{id}")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
-        userService.update(id, user);
+    public String updateUser(@ModelAttribute("editUser") User editUser, @PathVariable("id") int id) {
+        userService.update(id, editUser);
+        System.out.println(editUser);
         return "redirect:/admin";
+
     }
 
     @PostMapping("admin/delete/{id}")

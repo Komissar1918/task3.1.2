@@ -8,8 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.models.User;
-import ru.itmentor.spring.boot_security.demo.security.UserDetailsImpl;
-import ru.itmentor.spring.boot_security.demo.services.UserDetailsServiceImpl;
+import ru.itmentor.spring.boot_security.demo.services.UserService;
 
 
 import java.util.List;
@@ -18,10 +17,10 @@ import java.util.List;
 @Controller
 public class UsersController {
 
-    private final UserDetailsServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UsersController(UserDetailsServiceImpl userService) {
+    public UsersController(UserService userService) {
         this.userService = userService;
     }
 
@@ -30,10 +29,10 @@ public class UsersController {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        model.addAttribute("userPrincipal", userDetails.getUser());
-        model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
-                " with roles " + userDetails.getUser().getRole().replace("ROLE_", ""));
+        User user = (User) authentication.getPrincipal();
+        model.addAttribute("userPrincipal", user);
+        model.addAttribute("loginUserInfo", user.getName() + " " + user.getSurname() +
+                " with roles " + user.getRoles());
         model.addAttribute("newUser", new User());
         model.addAttribute("editUser", new User());
         return "users";
@@ -43,10 +42,10 @@ public class UsersController {
     @GetMapping("/user")
     public String userPageShow(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        model.addAttribute("loginUserInfo", userDetails.getUser().getName() + " " + userDetails.getUser().getSurname() +
-                " with roles " + userDetails.getUser().getRole());
-        model.addAttribute("userPrincipal", userDetails.getUser());
+        User user = (User) authentication.getPrincipal();
+        model.addAttribute("loginUserInfo", user.getName() + " " + user.getSurname() +
+                " with roles " + user.getRoles());
+        model.addAttribute("userPrincipal", user);
 
         return "user";
     }
@@ -54,7 +53,7 @@ public class UsersController {
 
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("newUser") User newUser) {
-        userService.save(newUser);
+        userService.saveUser(newUser);
         return "redirect:/admin";
     }
 
@@ -69,7 +68,7 @@ public class UsersController {
 
     @PostMapping("admin/delete/{id}")
     public String deleteUser(@PathVariable("id") int id, @ModelAttribute("user") User user) {
-        userService.delete(id);
+        userService.deleteUser(id);
         return "redirect:/admin";
     }
 

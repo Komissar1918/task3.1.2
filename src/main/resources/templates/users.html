@@ -61,8 +61,9 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Surname</th>
-                            <th>Password</th>
-                            <th>Role</th>
+                            <th>Email</th>
+<!--                            <th>Password</th>-->
+<!--                            <th>Role</th>-->
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -71,8 +72,9 @@
                                 <td th:text="${user.getId()}"></td>
                                 <td th:text="${user.getName()}"></td>
                                 <td th:text="${user.getSurname()}"></td>
-                                <td th:text="${user.getPassword()}"></td>
-                                <td th:text="${user.getRole()}"></td>
+                                <td th:text="${user.getEmail()}"></td>
+
+<!--                              <td th:text="${user.getRole()}"></td>-->
                                 <td>
                                     <div class="modal fade" th:id="'editModalCenter_' + ${user.getId()}"
                                          tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle"
@@ -81,7 +83,7 @@
                                             <div class="modal-content">
                                                 <form method="post"
                                                       th:action="@{'admin/edit/' + ${user.getId()}}" >
-<!--                                                    th:object="${editUser}"-->
+
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="editModalLongTitle">Edit user</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -122,34 +124,33 @@
 
                                                             </div>
                                                         </div>
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-md-8 gy-3">
+                                                            <label for="validationEditLastName">Last
+                                                                name</label>
+                                                            <input type="text" class="form-control"
+                                                                   id="validationEditEmail"
+                                                                   th:name="surname"
+                                                                   th:value="${user.getEmail()}" >
 
-
-                                                        <div class="row justify-content-center">
-                                                            <div class="col-md-8 gy-3">
-                                                                <label for="validationEditPassword">Password</label>
-                                                                <input type="text"
-                                                                       class="form-control"
-                                                                       th:value="${user.getPassword()}"
-                                                                       th:name="password"
-                                                                       id="validationEditPassword">
-
-                                                            </div>
                                                         </div>
-                                                        <div class="row justify-content-center">
-                                                            <div class="col-md-8 gy-3">
-                                                                <label for="validationEditRole">Role</label>
-                                                                <select multiple size="2" class="form-select"
-                                                                        id="validationEditRole"
-                                                                        name="form_selected_roles" required>
-                                                                    <option th:value="${user.getRole()}"
-                                                                            th:name="role"
-                                                                            th:text="${user.getRole()}"
-                                                                    >
+                                                    </div>
 
-                                                                    </option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
+<!--                                                        <div class="row justify-content-center">-->
+<!--                                                            <div class="col-md-8 gy-3">-->
+<!--                                                                <label for="validationEditRole">Role</label>-->
+<!--                                                                <select multiple size="2" class="form-select"-->
+<!--                                                                        id="validationEditRole"-->
+<!--                                                                        name="form_selected_roles" required>-->
+<!--                                                                    <option th:value="${user.getRole()}"-->
+<!--                                                                            th:name="role"-->
+<!--                                                                            th:text="${user.getRole()}"-->
+<!--                                                                    >-->
+
+<!--                                                                    </option>-->
+<!--                                                                </select>-->
+<!--                                                            </div>-->
+<!--                                                        </div>-->
                                                         <input type="submit"
                                                                class="visually-hidden"/>
 
@@ -211,18 +212,18 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="row justify-content-center">
-                                                            <div class="col-md-8 gy-3">
-                                                                <label for="deleteFormRole">Role</label>
-                                                                <select multiple size="2" class="form-select"
-                                                                        id="deleteFormRole" disabled>
-                                                                    <option
-                                                                            th:value="${user.getRole()}">
-                                                                    </option>
-                                                                </select>
-                                                            </div>
+<!--                                                        <div class="row justify-content-center">-->
+<!--                                                            <div class="col-md-8 gy-3">-->
+<!--                                                                <label for="deleteFormRole">Role</label>-->
+<!--                                                                <select multiple size="2" class="form-select"-->
+<!--                                                                        id="deleteFormRole" disabled>-->
+<!--                                                                    <option-->
+<!--                                                                            th:value="${user.getRole()}">-->
+<!--                                                                    </option>-->
+<!--                                                                </select>-->
+<!--                                                            </div>-->
 
-                                                        </div>
+<!--                                                        </div>-->
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -274,19 +275,19 @@
                             <input type="text" class="form-control" th:field="*{password}" id="password">
                                         </div>
                             </div>
-                            <div class="row justify-content-center">
-                                <div class="col-md-8 gy-3">
-                                    <label for="validationCreateRole">Role</label>
-                            <select multiple size="2"  class="form-select" id="validationCreateRole" aria-label="Default select example" name="form_selected_roles"
-                                    required>
-                                <option th:value="${newUser}"
-                                        th:selected="*{role}">ADMIN</option>
-                                <option th:value="${newUser}"
-                                        th:selected="*{role}">USER</option>
+<!--                            <div class="row justify-content-center">-->
+<!--                                <div class="col-md-8 gy-3">-->
+<!--                                    <label for="validationCreateRole">Role</label>-->
+<!--&lt;!&ndash;                            <select multiple size="2"  class="form-select" id="validationCreateRole" aria-label="Default select example" name="form_selected_roles"&ndash;&gt;-->
+<!--&lt;!&ndash;                                    required>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <option th:value="${newUser}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        th:selected="*{roles}">ADMIN</option>&ndash;&gt;-->
+<!--&lt;!&ndash;                                <option th:value="${newUser}"&ndash;&gt;-->
+<!--&lt;!&ndash;                                        th:selected="*{roles}">USER</option>&ndash;&gt;-->
 
-                            </select>
-                                                </div>
-                            </div>
+<!--&lt;!&ndash;                            </select>&ndash;&gt;-->
+<!--                                                </div>-->
+<!--                            </div>-->
                             <div class="row justify-content-center">
                                 <div class="col-auto mt-3">
                             <button type="submit" class="btn btn-success">Add new user</button>

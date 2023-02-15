@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.itmentor.spring.boot_security.demo.models.Role;
 import ru.itmentor.spring.boot_security.demo.models.User;
 import ru.itmentor.spring.boot_security.demo.services.UserService;
 
@@ -31,8 +32,14 @@ public class UsersController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         model.addAttribute("userPrincipal", user);
-        model.addAttribute("loginUserInfo", user.getName() + " " + user.getSurname() +
-                " with roles " + user.getRoles());
+        model.addAttribute("loginUserEmail", user.getEmail());
+        StringBuilder sb = new StringBuilder();
+        for(Role role : user.getRoles()) {
+            sb.append(role.getName()).append(", ");
+        }
+        String roles = sb.toString().replaceAll("\\s*,\\s*$", "").replaceAll("ROLE_", "");;
+        System.out.println(roles);
+        model.addAttribute("loginUserRoles",  roles);
         model.addAttribute("newUser", new User());
         model.addAttribute("editUser", new User());
         return "users";
@@ -43,8 +50,14 @@ public class UsersController {
     public String userPageShow(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
-        model.addAttribute("loginUserInfo", user.getName() + " " + user.getSurname() +
-                " with roles " + user.getRoles());
+        model.addAttribute("loginUserEmail", user.getEmail());
+        StringBuilder sb = new StringBuilder();
+        for(Role role : user.getRoles()) {
+            sb.append(role.getName()).append(", ");
+        }
+        String roles = sb.toString().replaceAll("\\s*,\\s*$", "").replaceAll("ROLE_", "");;
+        System.out.println(roles);
+        model.addAttribute("loginUserRoles",  roles);
         model.addAttribute("userPrincipal", user);
 
         return "user";

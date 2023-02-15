@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div>
             <div color="FFF-FFF">
-                <p th:text="${loginUserInfo}" style="color:#FFFFFF"></p>
+                <p th:text="${loginUserEmail} + ' with roles ' + ${loginUserRoles}" style="color:#FFFFFF"></p>
             </div>
         </div>
         <a class="nav-link" href="/logout" style="color:#C2C0C0FF">Logout</a>
@@ -62,8 +62,7 @@
                             <th>Name</th>
                             <th>Surname</th>
                             <th>Email</th>
-<!--                            <th>Password</th>-->
-<!--                            <th>Role</th>-->
+                            <th>Role</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
@@ -73,10 +72,13 @@
                                 <td th:text="${user.getName()}"></td>
                                 <td th:text="${user.getSurname()}"></td>
                                 <td th:text="${user.getEmail()}"></td>
-
-<!--                              <td th:text="${user.getRole()}"></td>-->
                                 <td>
-                                    <div class="modal fade" th:id="'editModalCenter_' + ${user.getId()}"
+                                    <th:block th:each="role: ${user.getRoles()}"
+                                              th:text="${role.getName.replace('ROLE_', '')} + ' '"></th:block>
+                                </td>
+
+                                <td>
+                                    <div class="modal fade" th:id="'editModal_' + ${user.getId()}"
                                          tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle"
                                          aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -104,10 +106,10 @@
                                                             <div class="row justify-content-center">
                                                             <div class="col-md-8 gy-3">
 
-                                                                <label th:for="'validationEditFirstName' + ${user.getId()}">First
+                                                                <label th:for="'editFirstName' + ${user.getId()}">First
                                                                     name</label>
                                                                 <input type="text" class="form-control"
-                                                                       th:id="'validationEditFirstName' + ${user.getId()}"
+                                                                       th:id="'editFirstName' + ${user.getId()}"
                                                                        th:name="name"
                                                                        th:value="${user.getName()}" >
 
@@ -115,10 +117,10 @@
                                                         </div>
                                                         <div class="row justify-content-center">
                                                             <div class="col-md-8 gy-3">
-                                                                <label for="validationEditLastName">Last
+                                                                <label for="editLastName">Last
                                                                     name</label>
                                                                 <input type="text" class="form-control"
-                                                                       id="validationEditLastName"
+                                                                       id="editLastName"
                                                                        th:name="surname"
                                                                        th:value="${user.getSurname()}" >
 
@@ -126,11 +128,10 @@
                                                         </div>
                                                     <div class="row justify-content-center">
                                                         <div class="col-md-8 gy-3">
-                                                            <label for="validationEditLastName">Last
-                                                                name</label>
+                                                            <label for="editEmail">Email</label>
                                                             <input type="text" class="form-control"
-                                                                   id="validationEditEmail"
-                                                                   th:name="surname"
+                                                                   id="editEmail"
+                                                                   th:name="email"
                                                                    th:value="${user.getEmail()}" >
 
                                                         </div>
@@ -142,9 +143,10 @@
 <!--                                                                <select multiple size="2" class="form-select"-->
 <!--                                                                        id="validationEditRole"-->
 <!--                                                                        name="form_selected_roles" required>-->
-<!--                                                                    <option th:value="${user.getRole()}"-->
-<!--                                                                            th:name="role"-->
-<!--                                                                            th:text="${user.getRole()}"-->
+<!--                                                                    <option th:each="role: ${user.getRoles()}"-->
+<!--                                                                            th:value="${role.getId()}"-->
+<!--                                                                            th:text="${role.getName.replace('ROLE_', '')} + ' '"-->
+<!--                                                                            th:selected="${role.getName().equals('ROLE_USER') || user.hasRole(role.getName())}"-->
 <!--                                                                    >-->
 
 <!--                                                                    </option>-->
@@ -167,12 +169,12 @@
                                     </div>
 
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                            th:data-bs-target="'#editModalCenter_' + ${user.getId()}">
+                                            th:data-bs-target="'#editModal_' + ${user.getId()}">
                                         Edit
                                     </button>
                                 </td>
                                 <td>
-                                    <div class="modal fade" th:id="'deleteModalCenter_' + ${user.getId()}"
+                                    <div class="modal fade" th:id="'deleteModal_' + ${user.getId()}"
                                          tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
                                          aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -212,18 +214,17 @@
                                                             </div>
                                                         </div>
 
-<!--                                                        <div class="row justify-content-center">-->
-<!--                                                            <div class="col-md-8 gy-3">-->
-<!--                                                                <label for="deleteFormRole">Role</label>-->
-<!--                                                                <select multiple size="2" class="form-select"-->
-<!--                                                                        id="deleteFormRole" disabled>-->
-<!--                                                                    <option-->
-<!--                                                                            th:value="${user.getRole()}">-->
-<!--                                                                    </option>-->
-<!--                                                                </select>-->
-<!--                                                            </div>-->
-
-<!--                                                        </div>-->
+                                                   <div class="row justify-content-center">
+                                                                <div class="col-md-8 gy-3">
+                                                                    <label for="deleteFormRole">Role</label>
+                                                                    <select multiple size="2" class="form-select"
+                                                                            id="deleteFormRole" disabled>
+                                                                        <option th:each="role: ${user.getRoles()}"
+                                                                                th:text="${role.getName().replace('ROLE_', '')} + ' '">
+                                                                        </option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
 
                                                 </div>
                                                 <div class="modal-footer">
@@ -240,7 +241,7 @@
                                     </div>
 
                                     <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                            th:data-bs-target="'#deleteModalCenter_' + ${user.getId()}">
+                                            th:data-bs-target="'#deleteModal_' + ${user.getId()}">
                                         Delete
                                     </button>
                                 </td>
@@ -248,6 +249,7 @@
                         </div>
 
                     </table>
+
                 </div>
                 <div class="tab-pane fade" id="new-user" role="tabpanel" aria-labelledby="new-user-tab">
                     <table class="table table-striped">
@@ -310,15 +312,17 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Surname</th>
-                    <th>Password</th>
+                    <th>Email</th>
                     <th>Role</th>
                 </tr>
                 <td th:text="${userPrincipal.getId()}"></td>
                 <td th:text="${userPrincipal.getName()}"></td>
                 <td th:text="${userPrincipal.getSurname()}"></td>
-                <td th:text="${userPrincipal.getPassword()}"></td>
-                <td th:text="${userPrincipal.getRole}"></td>
-
+                <td th:text="${userPrincipal.getEmail()}"></td>
+                <td>
+                    <th:block th:each="role: ${userPrincipal.getRoles()}"
+                              th:text="${role.getName.replace('ROLE_', '')} + ' '"></th:block>
+                </td>
             </table>
 
         </div>

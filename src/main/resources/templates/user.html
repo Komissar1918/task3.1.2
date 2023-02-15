@@ -15,7 +15,7 @@
     <div class="container-fluid">
         <div>
             <div color="FFF-FFF">
-                <p th:text="${loginUserInfo}" style="color:#FFFFFF"></p>
+                <p th:text="${loginUserEmail} + ' with roles ' + ${loginUserRoles}" style="color:#FFFFFF"></p>
             </div>
         </div>
         <a class="nav-link" href="/logout" style="color:#C2C0C0FF">Logout</a>
@@ -41,14 +41,17 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Surname</th>
-                    <th>Password</th>
+                    <th>Email</th>
                     <th>Role</th>
                 </tr>
                 <td th:text="${userPrincipal.getId()}"></td>
                 <td th:text="${userPrincipal.getName()}"></td>
                 <td th:text="${userPrincipal.getSurname()}"></td>
-                <td th:text="${userPrincipal.getPassword()}"></td>
-                <td th:text="${userPrincipal.getRole}"></td>
+                <td th:text="${userPrincipal.getEmail()}"></td>
+                <td>
+                    <th:block th:each="role: ${userPrincipal.getRoles()}"
+                              th:text="${role.getName.replace('ROLE_', '')} + ' '"></th:block>
+                </td>
 
             </table>
 

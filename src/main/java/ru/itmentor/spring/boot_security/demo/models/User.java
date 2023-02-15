@@ -3,6 +3,7 @@ package ru.itmentor.spring.boot_security.demo.models;
 
 
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -32,8 +33,10 @@ public class User implements UserDetails{
     private String passwordConfirm;
     @Column
     private String email;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
 
 
 

@@ -137,22 +137,21 @@
                                                         </div>
                                                     </div>
 
-<!--                                                        <div class="row justify-content-center">-->
-<!--                                                            <div class="col-md-8 gy-3">-->
-<!--                                                                <label for="validationEditRole">Role</label>-->
-<!--                                                                <select multiple size="2" class="form-select"-->
-<!--                                                                        id="validationEditRole"-->
-<!--                                                                        name="form_selected_roles" required>-->
-<!--                                                                    <option th:each="role: ${user.getRoles()}"-->
-<!--                                                                            th:value="${role.getId()}"-->
-<!--                                                                            th:text="${role.getName.replace('ROLE_', '')} + ' '"-->
-<!--                                                                            th:selected="${role.getName().equals('ROLE_USER') || user.hasRole(role.getName())}"-->
-<!--                                                                    >-->
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-md-8 gy-3">
+                                                                <label for="editRole">Role</label>
+                                                                <select class="form-select form-select-sm" multiple aria-label="multiple select example"
+                                                                        id="editRole" name="selectedRoles">
+                                                                    <option
+                                                                            th:each="role : ${roles}"
+                                                                            th:value="${role.id}"
+                                                                            th:text="${role.name}"
+                                                                            th:selected="${role.toString().equals('ROLE_USER') || user.hasRole(role.toString())}">
+                                                                    </option>
 
-<!--                                                                    </option>-->
-<!--                                                                </select>-->
-<!--                                                            </div>-->
-<!--                                                        </div>-->
+                                                                </select>
+                                                            </div>
+                                                        </div>
                                                         <input type="submit"
                                                                class="visually-hidden"/>
 

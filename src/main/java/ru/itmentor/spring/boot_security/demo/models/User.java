@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -136,13 +137,17 @@ public class User implements UserDetails{
     }
 
 
-
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" +
                 '}';
+    }
+    public boolean hasRole(String role) {
+        return getAuthorities().stream().anyMatch(authority -> Objects.equals(authority.getAuthority(), role));
     }
 }

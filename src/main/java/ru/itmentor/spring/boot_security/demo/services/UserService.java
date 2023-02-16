@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -39,15 +38,12 @@ public class UserService {
         return findUser.orElse(null);
     }
 
-
+    @Transactional
     public boolean saveUser(User user) {
         User userFromDB = userRepository.findByEmail(user.getUsername());
-
         if (userFromDB != null) {
             return false;
         }
-
-        user.setRoles(Collections.singleton(new Role()));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;

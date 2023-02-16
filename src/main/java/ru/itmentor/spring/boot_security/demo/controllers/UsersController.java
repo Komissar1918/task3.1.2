@@ -16,6 +16,7 @@ import ru.itmentor.spring.boot_security.demo.services.UserService;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Controller
@@ -60,8 +61,7 @@ public class UsersController {
         model.addAttribute("loginUserEmail", user.getEmail());
         StringBuilder sb = new StringBuilder();
         for(Role role : user.getRoles()) {
-            sb.append(role.getName()).append(", ");
-        }
+            sb.append(role.getName()).append(", ");        }
         String roles = sb.toString().replaceAll("\\s*,\\s*$", "").replaceAll("ROLE_", "");;
         System.out.println(roles);
         model.addAttribute("loginUserRoles",  roles);
@@ -73,7 +73,11 @@ public class UsersController {
 
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("newUser") User newUser) {
+    public String saveUser(@ModelAttribute("newUser") User newUser, @RequestParam("selectedRolesForNewUser") ArrayList<Role> roles) {
+        HashSet<Role> setRoles = new HashSet<>(roles);
+        newUser.setRoles(setRoles);
+        System.out.println(newUser);
+        setRoles.forEach(System.out::println);
         userService.saveUser(newUser);
         return "redirect:/admin";
     }
@@ -81,14 +85,17 @@ public class UsersController {
 
     @PostMapping("admin/edit/{id}")
     public String updateUser(@ModelAttribute("editUser") User editUser, @RequestParam("selectedRoles") ArrayList<Role> roles, @PathVariable("id") int id) {
-        HashSet<Role> setRoles = new HashSet<>(roles);
-
-        setRoles.forEach(System.out::println);
-        editUser.setRoles(setRoles);
+        if(roles != null) {
+            Set<Role> setRoles = new HashSet<>(roles);
+            editUser.setRoles(setRoles);
+        } else {
+            User editUserWithoutEditRoles = userService.findUserById(id);
+            Set<Role> notEditRoles = editUserWithoutEditRoles.getRoles();
+            editUser.setRoles(notEditRoles);
+        }
         System.out.println(editUser);
         editUser.getRoles().forEach(System.out::println);
         userService.update(id, editUser);
-
         return "redirect:/admin";
 
     }

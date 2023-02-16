@@ -137,6 +137,17 @@
                                                         </div>
                                                     </div>
 
+                                                    <div class="row justify-content-center" style="display: none">
+                                                        <div class="col-md-8 gy-3">
+                                                            <label for="editPassword">Email</label>
+                                                            <input type="text" class="form-control"
+                                                                   id="editPassword"
+                                                                   th:name="password"
+                                                                   th:value="${user.getPassword()}" >
+
+                                                        </div>
+                                                    </div>
+
                                                         <div class="row justify-content-center">
                                                             <div class="col-md-8 gy-3">
                                                                 <label for="editRole">Role</label>
@@ -146,7 +157,7 @@
                                                                             th:each="role : ${roles}"
                                                                             th:value="${role.id}"
                                                                             th:text="${role.name}"
-                                                                            th:selected="${role.toString().equals('ROLE_USER') || user.hasRole(role.toString())}">
+                                                                            th:selected="${role.toString().equals('ROLE_USER') || role.toString().equals('ROLE_ADMIN') || user.hasRole(role.toString())}">
                                                                     </option>
 
                                                                 </select>
@@ -271,24 +282,33 @@
                                 </div>
                             </div>
                             <div class="row justify-content-center">
+                                <div class="col-md-8 gy-3">
+                                    <label for="email" class="form-label">Email
+                                    </label>
+                                    <input type="text" class="form-control" th:field="*{email}" id="email">
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
                                         <div class="col-md-8 gy-3">
                             <label for="password" class="form-label">Password</label>
                             <input type="text" class="form-control" th:field="*{password}" id="password">
                                         </div>
                             </div>
-<!--                            <div class="row justify-content-center">-->
-<!--                                <div class="col-md-8 gy-3">-->
-<!--                                    <label for="validationCreateRole">Role</label>-->
-<!--&lt;!&ndash;                            <select multiple size="2"  class="form-select" id="validationCreateRole" aria-label="Default select example" name="form_selected_roles"&ndash;&gt;-->
-<!--&lt;!&ndash;                                    required>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <option th:value="${newUser}"&ndash;&gt;-->
-<!--&lt;!&ndash;                                        th:selected="*{roles}">ADMIN</option>&ndash;&gt;-->
-<!--&lt;!&ndash;                                <option th:value="${newUser}"&ndash;&gt;-->
-<!--&lt;!&ndash;                                        th:selected="*{roles}">USER</option>&ndash;&gt;-->
+                            <div class="row justify-content-center">
+                                <div class="col-md-8 gy-3">
+                                    <label for="newUserRole">Role</label>
+                                    <select class="form-select form-select-sm" multiple aria-label="multiple select example"
+                                            id="newUserRole" name="selectedRolesForNewUser">
+                                        <option
+                                                th:each="role : ${roles}"
+                                                th:value="${role.id}"
+                                                th:text="${role.name}"
+                                                th:selected="${role.toString().equals('ROLE_USER') || role.toString().equals('ROLE_ADMIN')}">
+                                        </option>
 
-<!--&lt;!&ndash;                            </select>&ndash;&gt;-->
-<!--                                                </div>-->
-<!--                            </div>-->
+                                    </select>
+                                </div>
+                            </div>
                             <div class="row justify-content-center">
                                 <div class="col-auto mt-3">
                             <button type="submit" class="btn btn-success">Add new user</button>

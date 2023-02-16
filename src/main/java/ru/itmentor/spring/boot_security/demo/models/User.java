@@ -3,16 +3,18 @@ package ru.itmentor.spring.boot_security.demo.models;
 
 
 
+import org.hibernate.annotations.Cascade;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User{
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -28,18 +30,22 @@ public class User{
     @Column(name = "password")
     private String password;
 
-    @Column(name = "role")
-    private String role;
+    @Transient
+    private String passwordConfirm;
+    @Column
+    private String email;
 
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
     public User() {
     }
 
-    public User(String name, String surname, String password) {
+    public User(String name, String surname, String password, String email) {
         this.name = name;
         this.surname = surname;
         this.password = password;
+        this.email = email;
     }
     public Integer getId() {
         return id;
@@ -65,6 +71,35 @@ public class User{
         this.surname = surname;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
     public String getPassword() {
         return password;
     }
@@ -73,13 +108,31 @@ public class User{
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    @Override
+    public String getUsername() {
+        return email;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
 
     @Override
     public String toString() {
@@ -87,6 +140,11 @@ public class User{
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
+                ", email='" + email + '\'' +
+                ", roles=" +
                 '}';
+    }
+    public boolean hasRole(String role) {
+        return getAuthorities().stream().anyMatch(authority -> Objects.equals(authority.getAuthority(), role));
     }
 }

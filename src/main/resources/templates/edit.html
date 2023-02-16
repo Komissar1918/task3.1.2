@@ -13,13 +13,25 @@
     <label for="surname">Surname</label>
     <input type="text" th:field="*{surname}" id="surname">
     <br><br>
-    <label for="password">Password</label>
-    <input type="text" th:field="*{password}" id="password">
+    <label for="password">Email</label>
+    <input type="text" th:field="*{email}" id="email">
     <br><br>
-    <label for="role">Role</label>
-    <input type="text" th:field="*{role}" id="role">
+    <label for="password" >Password</label>
+    <input type="password"  th:field="*{password}" id="password">
+    <br><br>
+    <select class="form-select form-select-sm" multiple aria-label="multiple select example"
+            id="editRole" name="selectedRoles">
+        <option
+                th:each="role : ${roles}"
+                th:value="${role.id}"
+                th:text="${role.name}"
+                th:selected="${role.toString().equals('ROLE_USER') || role.toString().equals('ROLE_ADMIN')}">
+        </option>
+
+    </select>
     <br><br>
     <input type="submit" value="Update">
 </form>
+<a href="/logout">Logout</a>
 </body>
 </html>

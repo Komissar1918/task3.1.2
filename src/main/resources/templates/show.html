@@ -8,7 +8,11 @@
 Id: <p th:text="${user.getId()}">Value</p>
 Name: <p th:text="${user.getName()}">Value</p>
 Surname: <p th:text="${user.getSurname()}">Value</p>
-Password: <p th:text="${user.getPassword()}">Value</p>
+Email: <p th:text="${user.getPassword()}">
+    <th:block th:each="role: ${user.getRoles()}"
+     th:text="${role.getName.replace('ROLE_', '')} + ' '">
+    </th:block>
+</p>
 <br>
 <a href="/logout">Logout</a>
 

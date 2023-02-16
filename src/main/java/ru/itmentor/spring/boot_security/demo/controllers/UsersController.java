@@ -3,14 +3,13 @@ package ru.itmentor.spring.boot_security.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.models.User;
-import ru.itmentor.spring.boot_security.demo.security.UserDetailsImpl;
-import ru.itmentor.spring.boot_security.demo.services.UserDetailsServiceImpl;
+import ru.itmentor.spring.boot_security.demo.services.RoleService;
+import ru.itmentor.spring.boot_security.demo.services.UserService;
 
 
 import java.util.List;
@@ -19,30 +18,33 @@ import java.util.List;
 @Controller
 public class UsersController {
 
-    private final UserDetailsServiceImpl userService;
+    private final UserService userService;
+    private final RoleService roleService;
 
     @Autowired
-    public UsersController(UserDetailsServiceImpl userService) {
+    public UsersController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping("/admin")
     public String getUsers(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
+        model.addAttribute("roles", roleService.getAllRoles());
         return "users";
     }
 
     @GetMapping("/user")
     public String userPageShow(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        return show(userDetails.getUser().getId(), model);
+        User user = (User) authentication.getPrincipal();
+        return show(user.getId(), model);
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model){
-        model.addAttribute("user", userService.findOne(id));
+        model.addAttribute("user", userService.findUserById(id));
 
         return "show";
     }
@@ -57,13 +59,13 @@ public class UsersController {
     @PostMapping("/saveUser")
     public String saveUser(@ModelAttribute("user") User user) {
         System.out.println("Новый user");
-        userService.save(user);
+        userService.saveUser(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/{id}/edit")
     public String editUser(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.findOne(id));
+        model.addAttribute("user", userService.findUserById(id));
         return "edit";
     }
 
@@ -75,7 +77,7 @@ public class UsersController {
 
     @DeleteMapping("admin/{id}")
     public String deleteUser(@PathVariable("id") int id) {
-        userService.delete(id);
+        userService.deleteUser(id);
         return "redirect:/admin";
     }
 

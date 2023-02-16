@@ -13,7 +13,7 @@
 <tr>
     <th>Name</th>
     <th>Surname</th>
-    <th>Password</th>
+    <th>Email</th>
     <th>Role</th>
     <th>Action</th>
 </tr>
@@ -21,8 +21,11 @@
    <tr>
          <td th:text="${user.getName()}"></td>
          <td th:text="${user.getSurname()}"></td>
-         <td th:text="${user.getPassword()}"></td>
-         <td th:text="${user.getRole()}"></td>
+         <td th:text="${user.getEmail()}"></td>
+         <td>
+           <th:block th:each="role: ${user.getRoles()}"
+                     th:text="${role.getName.replace('ROLE_', '')} + ' '"></th:block>
+         </td>
          <td>
              <form th:method="GET" th:action="@{/{id}/edit(id=${user.getId()})}">
                  <input type="submit" value="Edit">

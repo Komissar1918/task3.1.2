@@ -84,7 +84,7 @@ public class UsersController {
 
 
     @PostMapping("admin/edit/{id}")
-    public String updateUser(@ModelAttribute("editUser") User editUser, @RequestParam("selectedRoles") ArrayList<Role> roles, @PathVariable("id") int id) {
+    public String updateUser(@ModelAttribute("editUser") User editUser, @RequestParam(value = "selectedRoles", defaultValue = "") ArrayList<Role> roles, @PathVariable("id") int id) {
         if(roles != null) {
             Set<Role> setRoles = new HashSet<>(roles);
             editUser.setRoles(setRoles);

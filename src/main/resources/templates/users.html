@@ -157,7 +157,7 @@
                                                                             th:each="role : ${roles}"
                                                                             th:value="${role.id}"
                                                                             th:text="${role.name}"
-                                                                            th:selected="${role.toString().equals('ROLE_USER') || role.toString().equals('ROLE_ADMIN') || user.hasRole(role.toString())}">
+                                                                            th:selected="${role.toString().equals('ROLE_USER') || role.toString().equals('ROLE_ADMIN')}">
                                                                     </option>
 
                                                                 </select>

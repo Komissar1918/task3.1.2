@@ -41,17 +41,20 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Surname</th>
+                    <th>Age</th>
                     <th>Email</th>
                     <th>Role</th>
                 </tr>
                 <td th:text="${userPrincipal.getId()}"></td>
                 <td th:text="${userPrincipal.getName()}"></td>
                 <td th:text="${userPrincipal.getSurname()}"></td>
+                <td th:text="${userPrincipal.getAge()}"></td>
                 <td th:text="${userPrincipal.getEmail()}"></td>
                 <td>
                     <th:block th:each="role: ${userPrincipal.getRoles()}"
                               th:text="${role.getName.replace('ROLE_', '')} + ' '"></th:block>
                 </td>
+
 
             </table>
 

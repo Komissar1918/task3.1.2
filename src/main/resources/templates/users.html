@@ -61,6 +61,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Surname</th>
+                            <th>Age</th>
                             <th>Email</th>
                             <th>Role</th>
                             <th>Edit</th>
@@ -71,6 +72,7 @@
                                 <td th:text="${user.getId()}"></td>
                                 <td th:text="${user.getName()}"></td>
                                 <td th:text="${user.getSurname()}"></td>
+                                <td th:text="${user.getAge()}"></td>
                                 <td th:text="${user.getEmail()}"></td>
                                 <td>
                                     <th:block th:each="role: ${user.getRoles()}"
@@ -126,6 +128,17 @@
 
                                                             </div>
                                                         </div>
+
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-md-8 gy-3">
+                                                            <label for="editLastName">Age</label>
+                                                            <input type="number" class="form-control"
+                                                                   id="editAge"
+                                                                   th:name="age"
+                                                                   th:value="${user.getAge()}" >
+
+                                                        </div>
+                                                    </div>
                                                     <div class="row justify-content-center">
                                                         <div class="col-md-8 gy-3">
                                                             <label for="editEmail">Email</label>
@@ -224,6 +237,24 @@
                                                             </div>
                                                         </div>
 
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-md-8 gy-3">
+                                                            <label for="deleteFormAge">Age</label>
+                                                            <input type="number" class="form-control"
+                                                                   id="deleteFormAge" disabled
+                                                                   th:value="${user.getAge()}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row justify-content-center">
+                                                        <div class="col-md-8 gy-3">
+                                                            <label for="deleteFormEmail">Email</label>
+                                                            <input type="text" class="form-control"
+                                                                   id="deleteFormEmail" disabled
+                                                                   th:value="${user.getEmail()}">
+                                                        </div>
+                                                    </div>
+
                                                    <div class="row justify-content-center">
                                                                 <div class="col-md-8 gy-3">
                                                                     <label for="deleteFormRole">Role</label>
@@ -267,8 +298,9 @@
                             <th colspan="3">Add new user</th>
                         </tr>
                     </table>
-                    <div class="mb-3">
-                        <form method="POST" action="/saveUser" th:object="${newUser}">
+                    <div class="container col-5">
+                        <form method="POST" action="/saveUser" th:object="${newUser}"
+                              class="g-3 needs-validation container text-center fw-bold">
                             <div class="row justify-content-center">
                                 <div class="col-md-8 gy-3">
                             <label for="name" class="form-label">Name</label>
@@ -279,6 +311,12 @@
                                 <div class="col-md-8 gy-3">
                             <label for="surname" class="form-label">Surname</label>
                             <input type="text" class="form-control" th:field="*{surname}" id="surname">
+                                </div>
+                            </div>
+                            <div class="row justify-content-center">
+                                <div class="col-md-8 gy-3">
+                                    <label for="age" class="form-label">Age</label>
+                                    <input type="number" class="form-control" th:field="*{age}" id="age">
                                 </div>
                             </div>
                             <div class="row justify-content-center">
@@ -331,12 +369,14 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Surname</th>
+                    <th>Age</th>
                     <th>Email</th>
                     <th>Role</th>
                 </tr>
                 <td th:text="${userPrincipal.getId()}"></td>
                 <td th:text="${userPrincipal.getName()}"></td>
                 <td th:text="${userPrincipal.getSurname()}"></td>
+                <td th:text="${userPrincipal.getAge()}"></td>
                 <td th:text="${userPrincipal.getEmail()}"></td>
                 <td>
                     <th:block th:each="role: ${userPrincipal.getRoles()}"

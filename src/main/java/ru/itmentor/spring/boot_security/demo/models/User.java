@@ -30,10 +30,11 @@ public class User implements UserDetails{
     @Column(name = "password")
     private String password;
 
-    @Transient
-    private String passwordConfirm;
     @Column
     private String email;
+
+    @Column
+    private Integer age;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
@@ -79,13 +80,6 @@ public class User implements UserDetails{
         this.email = email;
     }
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
 
     public Set<Role> getRoles() {
         return roles;
@@ -106,6 +100,14 @@ public class User implements UserDetails{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     @Override

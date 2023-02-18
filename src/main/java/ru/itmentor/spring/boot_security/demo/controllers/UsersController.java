@@ -1,11 +1,10 @@
 package ru.itmentor.spring.boot_security.demo.controllers;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.models.Role;
@@ -19,17 +18,18 @@ import java.util.List;
 import java.util.Set;
 
 
-@Controller
+@RestController
 public class UsersController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UsersController(UserService userService, RoleService roleService) {
+    public UsersController(UserService userService, RoleService roleService, ModelMapper modelMapper) {
         this.userService = userService;
         this.roleService = roleService;
-
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/admin")

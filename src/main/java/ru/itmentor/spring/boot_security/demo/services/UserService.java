@@ -5,13 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.itmentor.spring.boot_security.demo.models.Role;
 import ru.itmentor.spring.boot_security.demo.models.User;
-import ru.itmentor.spring.boot_security.demo.repositories.RoleRepository;
 import ru.itmentor.spring.boot_security.demo.repositories.UserRepository;
 import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +20,7 @@ public class UserService {
 
 
     @Autowired
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 

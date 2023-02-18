@@ -2,7 +2,6 @@ package ru.itmentor.spring.boot_security.demo.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.itmentor.spring.boot_security.demo.dto.UserDTO;
 import ru.itmentor.spring.boot_security.demo.models.Role;
 import ru.itmentor.spring.boot_security.demo.models.User;
 import ru.itmentor.spring.boot_security.demo.services.RoleService;
@@ -19,7 +19,6 @@ import ru.itmentor.spring.boot_security.demo.util.UserErrorResponse;
 import ru.itmentor.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
 
-import javax.naming.Binding;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -53,7 +52,7 @@ public class UsersController {
         for(Role role : user.getRoles()) {
             sb.append(role.getName()).append(", ");
         }
-        String roles = sb.toString().replaceAll("\\s*,\\s*$", "").replaceAll("ROLE_", "");;
+        String roles = sb.toString().replaceAll("\\s*,\\s*$", "").replaceAll("ROLE_", "");
         System.out.println(roles);
         model.addAttribute("loginUserRoles",  roles);
         model.addAttribute("newUser", new User());
@@ -71,7 +70,7 @@ public class UsersController {
         StringBuilder sb = new StringBuilder();
         for(Role role : user.getRoles()) {
             sb.append(role.getName()).append(", ");        }
-        String roles = sb.toString().replaceAll("\\s*,\\s*$", "").replaceAll("ROLE_", "");;
+        String roles = sb.toString().replaceAll("\\s*,\\s*$", "").replaceAll("ROLE_", "");
         System.out.println(roles);
         model.addAttribute("loginUserRoles",  roles);
         model.addAttribute("userPrincipal", user);

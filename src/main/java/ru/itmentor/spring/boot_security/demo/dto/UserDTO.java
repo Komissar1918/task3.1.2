@@ -1,7 +1,5 @@
 package ru.itmentor.spring.boot_security.demo.dto;
 
-import javax.persistence.Column;
-
 public class UserDTO {
 
     private String name;

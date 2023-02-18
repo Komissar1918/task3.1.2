@@ -8,14 +8,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.itmentor.spring.boot_security.demo.models.Role;
 import ru.itmentor.spring.boot_security.demo.models.User;
 import ru.itmentor.spring.boot_security.demo.services.RoleService;
 import ru.itmentor.spring.boot_security.demo.services.UserService;
 import ru.itmentor.spring.boot_security.demo.util.UserErrorResponse;
+import ru.itmentor.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
 
+import javax.naming.Binding;
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -77,26 +82,40 @@ public class UsersController {
 
 
     @PostMapping("/saveUser")
-    public String saveUser(@ModelAttribute("newUser") User newUser, @RequestParam("selectedRolesForNewUser") ArrayList<Role> roles) {
+    public ResponseEntity<HttpStatus> saveUser(@RequestBody @Valid User newUser,
+                                               @RequestParam("selectedRolesForNewUser") ArrayList<Role> roles,
+                                               BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+            StringBuilder errorMsg = new StringBuilder();
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            for(FieldError error : errors) {
+                errorMsg.append(error.getField())
+                        .append(" - ")
+                        .append(error.getDefaultMessage())
+                        .append(";");
+            }
+            throw new UserNotCreatedException(errorMsg.toString());
+        }
         HashSet<Role> setRoles = new HashSet<>(roles);
         newUser.setRoles(setRoles);
         System.out.println(newUser);
         setRoles.forEach(System.out::println);
         userService.saveUser(newUser);
-        return "redirect:/admin";
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
 
     @PostMapping("admin/edit/{id}")
-    public String updateUser(@ModelAttribute("editUser") User editUser, @RequestParam(value = "selectedRoles", defaultValue = "1") ArrayList<Role> roles, @PathVariable("id") int id) {
-        if(roles != null) {
-            Set<Role> setRoles = new HashSet<>(roles);
-            editUser.setRoles(setRoles);
-        } else {
-            User editUserWithoutEditRoles = userService.findUserById(id);
-            Set<Role> notEditRoles = editUserWithoutEditRoles.getRoles();
-            editUser.setRoles(notEditRoles);
+    public String updateUser(@ModelAttribute("editUser") User editUser,
+                             @RequestParam(value = "selectedRoles", defaultValue = "1") ArrayList<Role> roles,
+                             @PathVariable("id") int id,
+                             BindingResult bindingResult) {
+        if(bindingResult.hasErrors()) {
+
         }
+
+        Set<Role> setRoles = new HashSet<>(roles);
+        editUser.setRoles(setRoles);
         System.out.println(editUser);
         editUser.getRoles().forEach(System.out::println);
         userService.update(id, editUser);
@@ -110,10 +129,17 @@ public class UsersController {
         return "redirect:/admin";
     }
 
+    @ExceptionHandler
     private ResponseEntity<UserErrorResponse> handleException(UserNotFoundException e) {
         UserErrorResponse userErrorResponse = new UserErrorResponse (
                 "User with this id was not found");
         return new ResponseEntity<>(userErrorResponse, HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler
+    private ResponseEntity<UserErrorResponse> handleException(UserNotCreatedException e) {
+        UserErrorResponse userErrorResponse = new UserErrorResponse (
+                e.getMessage());
+        return new ResponseEntity<>(userErrorResponse, HttpStatus.BAD_REQUEST);
     }
 
 }

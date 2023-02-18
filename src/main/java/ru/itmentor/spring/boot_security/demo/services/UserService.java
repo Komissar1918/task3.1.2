@@ -9,6 +9,8 @@ import ru.itmentor.spring.boot_security.demo.models.Role;
 import ru.itmentor.spring.boot_security.demo.models.User;
 import ru.itmentor.spring.boot_security.demo.repositories.RoleRepository;
 import ru.itmentor.spring.boot_security.demo.repositories.UserRepository;
+import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +37,7 @@ public class UserService {
 
     public User findUserById(Integer id) {
         Optional<User> findUser = userRepository.findById(id);
-        return findUser.orElse(null);
+        return findUser.orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional

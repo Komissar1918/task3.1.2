@@ -3,6 +3,8 @@ package ru.itmentor.spring.boot_security.demo.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
@@ -11,6 +13,8 @@ import ru.itmentor.spring.boot_security.demo.models.Role;
 import ru.itmentor.spring.boot_security.demo.models.User;
 import ru.itmentor.spring.boot_security.demo.services.RoleService;
 import ru.itmentor.spring.boot_security.demo.services.UserService;
+import ru.itmentor.spring.boot_security.demo.util.UserErrorResponse;
+import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -33,7 +37,7 @@ public class UsersController {
     }
 
     @GetMapping("/admin")
-    public String getUsers(Model model) {
+    public List<User> getUsers(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -50,12 +54,12 @@ public class UsersController {
         model.addAttribute("newUser", new User());
         model.addAttribute("editUser", new User());
         model.addAttribute("roles", roleService.getAllRoles());
-        return "users";
+        return users;
     }
 
 
     @GetMapping("/user")
-    public String userPageShow(Model model) {
+    public User userPageShow(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         model.addAttribute("loginUserEmail", user.getEmail());
@@ -68,7 +72,7 @@ public class UsersController {
         model.addAttribute("userPrincipal", user);
 
 
-        return "user";
+        return user;
     }
 
 
@@ -106,6 +110,10 @@ public class UsersController {
         return "redirect:/admin";
     }
 
-
+    private ResponseEntity<UserErrorResponse> handleException(UserNotFoundException e) {
+        UserErrorResponse userErrorResponse = new UserErrorResponse (
+                "User with this id was not found");
+        return new ResponseEntity<>(userErrorResponse, HttpStatus.NOT_FOUND);
+    }
 
 }

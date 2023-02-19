@@ -17,6 +17,7 @@ import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -68,6 +69,11 @@ public class UsersController {
                              @PathVariable("id") int id,
                              BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
+            throw new UserNotFoundException();
+        }
+        if(!userService.findUserById(id).getClass().equals(User.class)) {
+            userService.update(id, editUser);
+        } else {
             throw new UserNotFoundException();
         }
         userService.update(id, editUser);

@@ -51,7 +51,10 @@ public class UserService {
     @Transactional
     public void update(Integer id, User user) {
         user.setId(id);
-        userRepository.save(user);
+        if(!userRepository.findById(id).equals(Optional.empty())) {
+            userRepository.save(user);
+        }
+
     }
 
 

@@ -7,6 +7,7 @@
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
+    <script type="text/javascript" src="/app.js"></script>
 
 </head>
 
@@ -15,7 +16,7 @@
     <div class="container-fluid">
         <div>
             <div color="FFF-FFF">
-                <p th:text="${loginUserEmail} + ' with roles ' + ${loginUserRoles}" style="color:#FFFFFF"></p>
+                <div id="user-principal" style="color:#FFFFFF"></div>
             </div>
         </div>
         <a class="nav-link" href="/logout" style="color:#C2C0C0FF">Logout</a>

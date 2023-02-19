@@ -16,6 +16,7 @@ import ru.itmentor.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,8 +40,7 @@ public class UsersController {
 
 
     @GetMapping("/user")
-    public User userPageShow() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public User userPageShow(Authentication authentication) {
         return (User) authentication.getPrincipal();
     }
 

@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +15,7 @@ import ru.itmentor.spring.boot_security.demo.util.UserNotCreatedException;
 import ru.itmentor.spring.boot_security.demo.util.UserNotFoundException;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -36,7 +33,7 @@ public class UsersController {
     @GetMapping("/admin")
     public List<User> getUsers(Authentication authentication) {
         List<User> result = userService.findAll();
-        result.add((User) authentication.getPrincipal());
+//        result.add((User) authentication.getPrincipal());
         return result;
     }
 

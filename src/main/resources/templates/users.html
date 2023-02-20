@@ -55,6 +55,7 @@
                 <div class="tab-pane fade show active" id="users-table" role="tabpanel"
                      aria-labelledby="users-table-tab">
                     <table class="table table-striped">
+                        <thead>
                         <tr>
                             <th colspan="8">All users</th>
                         </tr>
@@ -68,6 +69,7 @@
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
+                        </thead>
                         <div >
                             <tr>
                                 <td id="user-table-id">   </td>
@@ -79,13 +81,12 @@
 
 
                                 <td>
-                                    <div class="modal fade"
+                                    <div id="edit-user" class="modal fade"
                                          tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle"
                                          aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
-                                                <form method="post"
-                                                       >
+                                                <form method="post">
 
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="editModalLongTitle">Edit user</h5>
@@ -98,8 +99,7 @@
                                                             <div class="row justify-content-center">
                                                             <div class="col-md-8">
                                                                 <label >ID</label>
-                                                                <input disabled type="text" class="form-control"
-                                                                       >
+                                                                <input disabled type="text" class="form-control">
 
                                                             </div>
                                                             </div>
@@ -108,8 +108,7 @@
 
                                                                 <label >First
                                                                     name</label>
-                                                                <input type="text" class="form-control"
-                                                                        >
+                                                                <input type="text" class="form-control">
 
                                                             </div>
                                                         </div>
@@ -187,13 +186,13 @@
                                         </div>
                                     </div>
 
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    <button id="edit-user-button" type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             >
                                         Edit
                                     </button>
                                 </td>
                                 <td>
-                                    <div class="modal fade"
+                                    <div id="delete-user" class="modal fade"
                                          tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
                                          aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">

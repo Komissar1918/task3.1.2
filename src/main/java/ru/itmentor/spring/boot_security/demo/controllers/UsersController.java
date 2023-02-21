@@ -83,7 +83,7 @@ public class UsersController {
     }
 
 
-    @PostMapping("admin/edit/{id}")
+    @PatchMapping ("admin/edit/{id}")
     public String updateUser(@ModelAttribute("editUser") User editUser, @RequestParam(value = "selectedRoles", defaultValue = "1") ArrayList<Role> roles, @PathVariable("id") int id) {
         if(roles != null) {
             Set<Role> setRoles = new HashSet<>(roles);
@@ -100,7 +100,7 @@ public class UsersController {
 
     }
 
-    @PostMapping("admin/delete/{id}")
+    @DeleteMapping("admin/delete/{id}")
     public String deleteUser(@PathVariable("id") int id, @ModelAttribute("user") User user) {
         userService.deleteUser(id);
         return "redirect:/admin";

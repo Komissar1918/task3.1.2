@@ -85,7 +85,7 @@
                                          aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
-                                                <form method="post"
+                                                <form th:method="patch"
                                                       th:action="@{'admin/edit/' + ${user.getId()}}" >
 
                                                 <div class="modal-header">
@@ -202,7 +202,7 @@
                                          aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
-                                                <form  method="POST"
+                                                <form  th:method="DELETE"
                                                        th:action="@{'/admin/delete/' + ${user.getId()}}"
                                                        th:id="'deleteForm' + ${user.getId()}"  class="g-3 container text-center fw-bold">
                                                 <div class="modal-header">

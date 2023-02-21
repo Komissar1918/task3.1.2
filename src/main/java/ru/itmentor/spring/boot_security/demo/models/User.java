@@ -157,7 +157,4 @@ public class User implements UserDetails{
                 ", roles=" +
                 '}';
     }
-    public boolean hasRole(String role) {
-        return getAuthorities().stream().anyMatch(authority -> Objects.equals(authority.getAuthority(), role));
-    }
 }

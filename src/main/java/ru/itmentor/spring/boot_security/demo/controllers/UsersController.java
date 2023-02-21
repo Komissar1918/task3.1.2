@@ -33,7 +33,7 @@ public class UsersController {
     @GetMapping("/admin")
     public List<User> getUsers(Authentication authentication) {
         List<User> result = userService.findAll();
-//        result.add((User) authentication.getPrincipal());
+        //result.add((User) authentication.getPrincipal());
         return result;
     }
 

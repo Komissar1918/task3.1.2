@@ -30,10 +30,16 @@ public class UsersController {
         this.modelMapper = modelMapper;
     }
 
+//    @GetMapping("/admin")
+//    public User getUserAuthority(Authentication authentication) {
+//        return (User) authentication.getPrincipal();
+//
+//    }
+
     @GetMapping("/admin")
     public List<User> getUsers(Authentication authentication) {
         List<User> result = userService.findAll();
-        //result.add((User) authentication.getPrincipal());
+        result.add((User) authentication.getPrincipal());
         return result;
     }
 

@@ -120,9 +120,7 @@
                                     <label for="newUserRole">Role</label>
                                     <select class="form-select form-select-sm" multiple aria-label="multiple select example"
                                             id="newUserRole" name="selectedRolesForNewUser">
-                                        <option
-
-                                               >
+                                        <option>
                                         </option>
 
                                     </select>
@@ -143,6 +141,7 @@
         <div class="tab-pane fade text-start" id="v-pills-user" role="tabpanel" aria-labelledby="v-pills-user-tab">
             <h1>User information page</h1>
             <table class="table table-striped">
+                <thead>
                 <tr>
                     <th colspan="7">About user</th>
                 </tr>
@@ -154,7 +153,8 @@
                     <th>Email</th>
                     <th>Role</th>
                 </tr>
-
+                </thead>
+                <tbody id="authUserTableBody"></tbody>
             </table>
 
         </div>

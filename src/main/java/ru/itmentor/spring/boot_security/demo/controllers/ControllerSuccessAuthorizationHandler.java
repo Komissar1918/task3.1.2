@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class ControllerSuccessAuthorizationHandler {
 
-    @GetMapping("/")
-    public String getTemplate() {
+    @GetMapping("/admin")
+    public String getAdminTemplate() {
         return "users";
+    }
+
+    @GetMapping("/user")
+    public String getUserTemplate() {
+        return "user";
     }
 }

@@ -1,23 +1,44 @@
-const editId    = document.getElementById('edit-id');
-const editName = document.getElementById('edit-name');
-const editSurname = document.getElementById('edit-surname');
-const editAge = document.getElementById('edit-age');
-const editEmail = document.getElementById('edit-email');
-const editPassword = document.getElementById('edit-password');
-const editRole = document.getElementById('edit-role');
-const editCloseButton = document.getElementById('edit-close-button');
-const editSubmitButton = document.getElementById('edit-submit-button');
-const editModal = document.getElementById('edit-modal');
-const tabPaneUser = document.getElementById('v-pills-user');
-const authUserTable = document.getElementById('authUserTableBody');
-
-
-
 
 document.addEventListener("DOMContentLoaded", async () => {
     const userTableId = document.getElementById('usersTableBody');
+    const authUser = document.getElementById('auth-user-info');
     const authUserTable = document.getElementById('authUserTableBody');
-    let authUser = document.getElementById('auth-user-info');
+    const createUserButton = document.getElementById('create-user-button');
+    const editId = document.getElementById('edit-id');
+    const editName = document.getElementById('edit-name');
+    const editSurname = document.getElementById('edit-surname');
+    const editAge = document.getElementById('edit-age');
+    const editEmail = document.getElementById('edit-email');
+    const editPassword = document.getElementById('edit-password');
+    const editRole = document.getElementById('edit-role');
+    const editModal = document.getElementById('edit-modal');
+    const editCloseButton = document.getElementById('edit-close-button');
+    const editSubmitButton = document.getElementById('edit-submit-button');
+    const deleteID = document.getElementById('deleteFormId');
+    const deleteName = document.getElementById('deleteFormName');
+    const deleteSurname = document.getElementById('deleteFormSurname');
+    const deleteAge = document.getElementById('deleteFormAge');
+    const deleteEmail = document.getElementById('deleteFormEmail');
+    const deleteRole = document.getElementById('deleteFormRole');
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteSubmitButton = document.getElementById('delete-submit');
+
+
+    fetch('http://localhost:8080/admin/users')
+        .then(response => response.json())
+        .then(users => {
+            // Распарсим JSON-строку в объект JavaScript
+            displayUsers(users)
+        })
+        .catch(error => console.error(error));
+
+    fetch('http://localhost:8080/user/show')
+        .then(response => response.json())
+        .then(user => {
+            // Распарсим JSON-строку в объект JavaScript
+            console.log('/user get')
+            displayUser(user);
+        })        .catch(error => console.error(error));
 
     function displayUsers(users) {
         authUser.textContent = users[users.length - 1].email + ' with roles ' + users[users.length - 1].roles.map(role => role.name.replaceAll('ROLE_', '')).join(', ');
@@ -27,162 +48,179 @@ document.addEventListener("DOMContentLoaded", async () => {
             const userDiv = document.createElement('tr');
             userDiv.innerHTML = `<td>${users[i].id}</td><td>${users[i].name}</td><td>${users[i].surname}</td><td>${users[i].age}</td><td>${users[i].email}</td>
                 <td>${users[i].roles.map(role => role.name.replaceAll('ROLE_', '')).join(', ')}</td>
-                <td><button onclick="openModal(${users[i].id})" id="edit-user-button" type="button" class="btn btn-primary" data-bs-toggle="modal">Edit
-                                    </button></td> <td><button type="button" class="btn btn-danger" data-bs-toggle="modal">Delete
+                <td><button id="edit-user-button" type="button" class="btn btn-primary" data-bs-toggle="modal" data-target="#edit-modal" data-user-id="${users[i].id}">Edit
+                                    </button></td> <td><button id="delete-user-button" type="button" class="btn btn-danger" data-bs-toggle="modal" data-target="#deleteModal"
+                                    data-user-id="${users[i].id}">Delete
                                     </button></td>`;
+
             userTableId.appendChild(userDiv);
+
         }
+        const editButtons = userTableId.querySelectorAll('[data-user-id]');
+        for (let i = 0; i < editButtons.length; i++) {
+            editButtons[i].addEventListener('click', () => {
+                openEditModal(editButtons[i].getAttribute('data-user-id'));
+            });
+        }
+
+        const deleteButtons = userTableId.querySelectorAll('[data-user-id]');
+        for (let i = 0; i < deleteButtons.length; i++) {
+            deleteButtons[i].addEventListener('click', () => {
+                openDeleteModal(deleteButtons[i].getAttribute('data-user-id'));
+            });
+        }
+
     }
 
     function displayUser(user) {
-                authUserTable.innerHTML = '';
-                const userDiv = document.createElement('tr');
-                userDiv.innerHTML = `<td>${user.id}</td><td>${user.name}</td><td>${user.surname}</td><td>${user.age}</td><td>${user.email}</td>
+        authUserTable.innerHTML = '';
+        const userDiv = document.createElement('tr');
+        userDiv.innerHTML = `<td>${user.id}</td><td>${user.name}</td><td>${user.surname}</td><td>${user.age}</td><td>${user.email}</td>
                <td>${user.roles.map(role => role.name.replaceAll('ROLE_', '')).join(', ')}</td>`;
-                authUserTable.appendChild(userDiv);
-            }
+        authUserTable.appendChild(userDiv);
+    }
 
-    fetch('http://localhost:8080/admin')
-        .then(response => response.json())
-        .then(users => {
-            // Распарсим JSON-строку в объект JavaScript
-            displayUsers(users)
+    function openEditModal(id) {
+        // Найти пользователя по id
+        fetch(`http://localhost:8080/admin/${id}`)
+            .then(response => response.json())
+            .then(user => {
+                // Заполнить поля модального окна данными пользователя
+                editId.value = user.id;
+                editName.value = user.name;
+                editSurname.value = user.surname;
+                editAge.value = user.age;
+                editEmail.value = user.email;
+                editPassword.value = user.password;
+                editRole.value = user.roles.map(role => role.name);
+                // Открыть модальное окно
+                editModal.style.display = 'block';
+                editSubmitButton.addEventListener('submit', () => editUser(id));
+            })
+            .catch(error => console.error(error));
+    }
+
+    function editUser(id) {
+        const name = editName.value;
+        const surname = editSurname.value;
+        const age = editAge.value;
+        const email = editEmail.value;
+        const password = editPassword.value;
+        const role = editRole.value;
+
+        fetch('http://localhost:8080/admin/edit/${id}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },  body: JSON.stringify({ name, surname, age, email, password, role })
         })
-        .catch(error => console.error(error));
+            .then(response => response.json())
+            .then(updatedUser => {
+                console.log(`Updated user with id ${updatedUser.id}`);
+                fetch('http://localhost:8080/admin')
+                    .then(response => response.json())
+                    .then(users => {
+                        displayUsers(users);
+                    })
+                    .catch(error => console.error(error));
+            })
+            .catch(error => console.log(error));
+    }
 
-    fetch('http://localhost:8080/user')
-        .then(response => response.json())
-        .then(user => {
-            // Распарсим JSON-строку в объект JavaScript
-            console.log('/user get')
-            displayUser(user);
+    function openDeleteModal(id) {
+        // Найти пользователя по id
+        fetch(`http://localhost:8080/admin/${id}`)
+            .then(response => response.json())
+            .then(user => {
+                // Заполнить поля модального окна данными пользователя
+                deleteID.value = user.id;
+                deleteName.value = user.name;
+                deleteSurname.value = user.surname;
+                deleteAge.value = user.age;
+                deleteEmail.value = user.email;
+                deleteRole.value = user.roles.map(role => role.name);
+                // Открыть модальное окно
+                deleteModal.style.display = 'block';
+                deleteSubmitButton.addEventListener('click', () => deleteUser(id));
+            })
+            .catch(error => console.error(error));
+    }
+
+
+    function deleteUser(id) {
+        fetch(`http://localhost:8080/admin/delete/${id}`, {
+            method: 'DELETE'
         })
-        .catch(error => console.error(error));
+            .then(response => {
+                console.log(`Deleted user with id ${id}`);
+                fetch('http://localhost:8080/admin/users')
+                    .then(response => response.json())
+                    .then(users => {
+                        displayUsers(users);
+                    })
+                    .catch(error => console.error(error));
+            })
+            .catch(error => console.log(error));
+    }
+    // function deleteUser(id) {
+    //     fetch('http://localhost:8080/admin/delete/{id}', {
+    //         method: 'DELETE',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         },
+    //
+    //     })
+    //         .catch(error => console.error(error));
+    // }
 
 
 
+    createUserButton.addEventListener('click', () => {
+        const createName = document.getElementById('create-name');
+        const createSurname = document.getElementById('create-surname');
+        const createAge = document.getElementById('create-age');
+        const createEmail = document.getElementById('create-email');
+        const createPassword = document.getElementById('create-password');
+        const createRole = document.getElementById('create-role');
 
+        const name = createName.value;
+        const surname = createSurname.value;
+        const age = createAge.value;
+        const email = createEmail.value;
+        const password = createPassword.value;
+        const role = createRole.value;
 
-
-// Событие отправки формы для добавления нового пользователя
-//     userTableEdit.addEventListener('submit', (event) => {
-//         editUser(editUserId)
-//         event.preventDefault();
-//         const name = document.getElementById('name').value;
-//         const email = document.getElementById('email').value;
-//         const age = document.getElementById('age').value;
-//
-//         // Запрос для создания нового пользователя
-//         fetch('http://localhost:8080/saveUser', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ name, email, age })
-//         })
-//             .then(response => response.json())
-//             .then(newUser => {
-//                 console.log(`Created user with id ${newUser.id}`);
-//                 // Обновляем список пользователей
-//                 fetch('http://localhost:8080/admin')
-//                     .then(response => response.json())
-//                     .then(users => {
-//                         displayUsers(users);
-//                     })
-//                     .catch(error => console.error(error));
-//             })
-//             .catch(error => console.error(error));
-//     });
-//
-//
-//     function createUser(user) {
-//         fetch('http://localhost:8080/saveUser', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(user)
-//         })
-//             .then(response => response.json())
-//             .then(newUser => {
-//                 console.log(`Created user with id ${newUser.id}`);
-//                 displayUsers(users);
-//             })
-//             .catch(error => console.error(error));
-//     }
-//
-//     function updateUser(id, updatedUser) {
-//         fetch(`http://localhost:8080/admin/edit/${id}`, {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify(updatedUser)
-//         })
-//             .then(response => response.json())
-//             .then(updatedUser => {
-//                 console.log(`Updated user with id ${updatedUser.id}`);
-//                 displayUsers()
-//             })
-//             .catch(error => console.error(error));
-//     }
-//
-//     function deleteUser(id) {
-//         fetch(`http://localhost:8080/admin/delete/${id}`, {
-//             method: 'DELETE'
-//         })
-//             .then(() => {
-//                 console.log(`Deleted user with id ${id}`);
-//                 displayUsers();
-//             })
-//             .catch(error => console.error(error));
-//     }
+        fetch('http://localhost:8080/saveUser', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, surname, age, email, password, role })
+        })
+            .then(response => response.json())
+            .then(user => {
+                console.log(`Created user with id ${user.id}`);
+                createName.value = '';
+                createSurname.value = '';
+                createAge.value = '';
+                createEmail.value = '';
+                createPassword.value = '';
+                createRole.value = '';
+                fetch('http://localhost:8080/admin/users')
+                    .then(response => response.json())
+                    .then(users => {
+                        displayUsers(users);
+                    })
+                    .catch(error => console.error(error));
+            })
+            .catch(error => console.log(error));
+    });
 });
 
-function editUser(id) {
-    const user = { id, name, surname, email };
-
-    fetch('http://localhost:8080/admin/edit/${id}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },  body: JSON.stringify(user)
-    })
-        .then(response => response.json())
-        .then(user => {
-            editId.value = user.id;
-            editName.value = user.name;
-            editSurname.value = user.surname;
-            editAge.value = user.age;
-            editEmail.value = user.email;
-            editPassword.value = user.password;
-            editRole.value = user.roles.map(role => role.name).join(', ');
-            editModal.style.display = "block";
-
-        })
-        .catch(error => console.log(error));
-}
 
 
-function openModal(id) {
-    // Получить модальное окно
-    let modal = document.getElementById("edit-modal");
 
-    // Получить элемент для закрытия модального окна
-    let closeBtn = document.getElementsByClassName("Close")[0];
 
-    // Открыть модальное окно при клике на кнопку
-    modal.style.display = "block";
 
-    // Закрыть модальное окно при клике на элемент для закрытия
-    closeBtn.onclick = function() {
-        modal.style.display = "none";
-    }
-    // Закрыть модальное окно при клике за пределами модального окна
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    }
-}
+
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -128,7 +128,7 @@
                             </div>
                             <div class="row justify-content-center">
                                 <div class="col-auto mt-3">
-                            <button type="submit" class="btn btn-success">Add new user</button>
+                            <button id="create-user-button" type="submit" class="btn btn-success">Add new user</button>
                                 </div>
                             </div>
                         </form>
@@ -165,7 +165,7 @@
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form method="post">
+
 
                 <div class="modal-header">
                     <h5 class="modal-title" id="editModalLongTitle">Edit user</h5>
@@ -253,17 +253,16 @@
                     </button>
                     <button id="edit-submit-button" type="submit" class="btn btn-primary" tabindex="0">Edit</button>
                 </div>
-            </form>
+
         </div>
     </div>
 </div>
-<div id="delete-user" class="modal fade"
-     tabindex="-1" role="dialog" aria-labelledby="deleteModalCenterTitle"
+<div id="deleteModal" class="modal fade"
+     tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
      aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form  method="POST"
-                   class="g-3 container text-center fw-bold">
+
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLongTitle">Delete
                         user</h5>
@@ -331,11 +330,11 @@
                     <button type="button" class="btn btn-secondary"
                             data-bs-dismiss="modal">Close
                     </button>
-                    <button type="submit" class="btn btn-danger">
+                    <button id="delete-submit" type="submit" class="btn btn-danger">
                         Delete
                     </button>
                 </div>
-            </form>
+
         </div>
     </div>
 </div>

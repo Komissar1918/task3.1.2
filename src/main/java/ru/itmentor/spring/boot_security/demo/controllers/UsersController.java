@@ -36,21 +36,25 @@ public class UsersController {
 //
 //    }
 
-    @GetMapping("/admin")
+    @GetMapping("/admin/users")
     public List<User> getUsers(Authentication authentication) {
         List<User> result = userService.findAll();
         result.add((User) authentication.getPrincipal());
         return result;
     }
 
+    @GetMapping("admin/{id}")
+    public User getUser(@PathVariable("id") int id) {
+        return userService.findUserById(id);
+    }
 
-    @GetMapping("/user")
+    @GetMapping("/user/show")
     public User userPageShow(Authentication authentication) {
         return (User) authentication.getPrincipal();
     }
 
 
-    @PostMapping("/saveUser")
+    @PutMapping("/saveUser")
     public ResponseEntity<HttpStatus> saveUser(@RequestBody @Valid User newUser,
                                                BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
@@ -67,6 +71,7 @@ public class UsersController {
         userService.saveUser(newUser);
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
 
 
     @PostMapping("admin/edit/{id}")
@@ -86,7 +91,7 @@ public class UsersController {
 
     }
 
-    @PostMapping("admin/delete/{id}")
+    @DeleteMapping("admin/delete/{id}")
     public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return ResponseEntity.ok(HttpStatus.OK);

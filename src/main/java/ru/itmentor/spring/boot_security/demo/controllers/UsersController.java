@@ -8,7 +8,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import ru.itmentor.spring.boot_security.demo.models.Role;
 import ru.itmentor.spring.boot_security.demo.models.User;
+import ru.itmentor.spring.boot_security.demo.services.RoleService;
 import ru.itmentor.spring.boot_security.demo.services.UserService;
 import ru.itmentor.spring.boot_security.demo.util.UserErrorResponse;
 import ru.itmentor.spring.boot_security.demo.util.UserNotCreatedException;
@@ -22,19 +24,16 @@ import java.util.List;
 public class UsersController {
 
     private final UserService userService;
+    public final RoleService roleService;
     private final ModelMapper modelMapper;
 
     @Autowired
-    public UsersController(UserService userService, ModelMapper modelMapper) {
+    public UsersController(UserService userService, RoleService roleService, ModelMapper modelMapper) {
         this.userService = userService;
+        this.roleService = roleService;
         this.modelMapper = modelMapper;
     }
 
-//    @GetMapping("/admin")
-//    public User getUserAuthority(Authentication authentication) {
-//        return (User) authentication.getPrincipal();
-//
-//    }
 
     @GetMapping("/admin/users")
     public List<User> getUsers(Authentication authentication) {
@@ -48,13 +47,18 @@ public class UsersController {
         return userService.findUserById(id);
     }
 
+    @GetMapping("/admin/roles/")
+    public List<Role> getAllRoles() {
+        return roleService.getAllRoles();
+    }
+
     @GetMapping("/user/show")
     public User userPageShow(Authentication authentication) {
         return (User) authentication.getPrincipal();
     }
 
 
-    @PutMapping("/saveUser")
+    @PostMapping("/saveUser")
     public ResponseEntity<HttpStatus> saveUser(@RequestBody @Valid User newUser,
                                                BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
@@ -74,20 +78,20 @@ public class UsersController {
 
 
 
-    @PostMapping("admin/edit/{id}")
-    public ResponseEntity<HttpStatus> updateUser(@RequestBody User editUser,
+    @PutMapping("admin/edit/{id}")
+    public User updateUser(@RequestBody User editUser,
                              @PathVariable("id") int id,
                              BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             throw new UserNotFoundException();
         }
-        if(!userService.findUserById(id).getClass().equals(User.class)) {
+        if(userService.findUserById(id).getClass().equals(User.class)) {
             userService.update(id, editUser);
         } else {
             throw new UserNotFoundException();
         }
         userService.update(id, editUser);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return userService.findUserById(id);
 
     }
 

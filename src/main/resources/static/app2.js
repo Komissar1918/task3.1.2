@@ -1,8 +1,17 @@
 $(document).ready ( function () {
     let respRolesData = null;
+    let formSelectCreate = document.getElementById("newUserRole");
     $.ajax({url: "http://localhost:8080/admin/roles/", success: function(result){
             respRolesData =  result;
+            formSelectCreate.innerHTML = '';
+            for (let i = 0; i < respRolesData.length; i++) {
+                formSelectCreate.append(new Option( respRolesData[i].name, respRolesData[i].id));
+                console.log(respRolesData[i]);
+            }
         }});
+
+
+
     fetch('http://localhost:8080/admin/users')
         .then(response => response.json())
         .then(users => {
@@ -23,27 +32,15 @@ $(document).ready ( function () {
         }).catch(error => console.error(error));
 
 
-    function getRoles() {
-        const respRoles = fetch('http://localhost:8080/admin/roles/', {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        console.log(respRoles);
-        return  respRoles;
-
-    }
 
         $(document).on ("click", ".edit-btn", function () {
         const id = $(this).data("id")
-        // alert(id);
         openEditModal(id);
 
     });
 
     $(document).on ("click", "#edit-submit-button", function () {
         const id = $(this).data("id")
-        // alert(id);
         editUser(id);
 
     });
@@ -70,7 +67,6 @@ $(document).ready ( function () {
     const editAge = document.getElementById('edit-age');
     const editEmail = document.getElementById('edit-email');
     const editPassword = document.getElementById('edit-password');
-    const editCloseButton = document.getElementById('edit-close-button');
     let myModal = new bootstrap.Modal(document.getElementById('edit-modal'));
     let myDeleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
     const deleteID = document.getElementById('deleteFormId');
@@ -79,8 +75,9 @@ $(document).ready ( function () {
     const deleteAge = document.getElementById('deleteFormAge');
     const deleteEmail = document.getElementById('deleteFormEmail');
     const deleteRole = document.getElementById('deleteFormRole');
-    const deleteSubmitButton = document.getElementById('delete-submit');
     let formSelect = document.getElementById("edit-role");
+
+
 
     function openEditModal(id) {
         // Найти пользователя по id
@@ -129,7 +126,7 @@ $(document).ready ( function () {
             if (formSelect[i].selected) {
                 let role = {id: 0, name: ""}
                 role.id = i + 1;
-                role.name = formSelect[i].value;
+                role.name = respRolesData[i].name;
                 roles.push(role);
             }
         }
@@ -231,53 +228,59 @@ $(document).ready ( function () {
     }
 
 
-    let createUserButton = document.querySelector('.btn-success');
+    let createUserButton = document.getElementById('create-user-button');
+
     createUserButton.addEventListener('click', async () => {
         const createName = document.getElementById('name');
         const createSurname = document.getElementById('surname');
         const createAge = document.getElementById('age');
         const createEmail = document.getElementById('email');
         const createPassword = document.getElementById('password');
-        const createRole = document.getElementById('newUserRole');
-        const respRoles = fetch('http://localhost:8080/admin/roles/', {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        const respRolesData = respRoles.json();
 
-        for (let i = 0; i < respRolesData.length; i++) {
-            // formSelect.options[respRolesData[i] + 1].selected = 1;
-            createRole.value = respRolesData[i] + 1;
-        }
+
+        // for (let i = 0; i < respRolesData.length; i++) {
+        //     formSelectCreate.value = respRolesData[i] + 1;
+        // }
 
         const name = createName.value;
         const surname = createSurname.value;
         const age = createAge.value;
         const email = createEmail.value;
         const password = createPassword.value;
-        const role = createRole.value;
+        let roles = [];
+
+        for (let i = 0; i < formSelectCreate.length; i++) {
+            if (formSelectCreate[i].selected) {
+                let role = {id: 0, name: ""}
+                role.id = i + 1;
+                role.name = respRolesData[i].name;
+                roles.push(role);
+            }
+        }
+        console.log(name, surname, age, email, password, roles);
+        console.log(JSON.stringify({name, surname,email, age, password, roles}))
 
         fetch('http://localhost:8080/saveUser', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({name, surname, age, email, password, role})
+            body: JSON.stringify({name, surname, age, email, password, roles})
         })
             .then(response => response.json())
             .then(user => {
-                console.log(`Created user with id ${user.id}`);
+                console.log(`Created user with email ${user.email}`);
                 createName.value = '';
                 createSurname.value = '';
                 createAge.value = '';
                 createEmail.value = '';
                 createPassword.value = '';
-                createRole.value = '';
+                formSelectCreate.value = '';
                 fetch('http://localhost:8080/admin/users')
                     .then(response => response.json())
                     .then(users => {
                         displayUsers(users);
+
                     })
                     .catch(error => console.error(error));
             })

@@ -59,7 +59,7 @@ public class UsersController {
 
 
     @PostMapping("/saveUser")
-    public ResponseEntity<HttpStatus> saveUser(@RequestBody @Valid User newUser,
+    public User saveUser(@RequestBody @Valid User newUser,
                                                BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             StringBuilder errorMsg = new StringBuilder();
@@ -73,7 +73,7 @@ public class UsersController {
             throw new UserNotCreatedException(errorMsg.toString());
         }
         userService.saveUser(newUser);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return newUser;
     }
 
 
